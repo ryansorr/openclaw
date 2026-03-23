@@ -164,7 +164,7 @@ export async function persistSessionUsageUpdate(params: {
             }
           }
 
-          const hasCurrentUsage = hasUsage;
+          const hasCurrentUsage = hasUsage || hasFreshContextSnapshot;
           const useFallback = !modelChanged && !hasCurrentUsage;
 
           if (hasCurrentUsage || hasFreshContextSnapshot) {

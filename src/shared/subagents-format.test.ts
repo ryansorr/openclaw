@@ -36,6 +36,11 @@ describe("shared/subagents-format", () => {
   it("resolves token totals and io breakdowns from valid numeric fields only", () => {
     expect(resolveTotalTokens()).toBeUndefined();
     expect(resolveTotalTokens({ totalTokens: 42 })).toBe(42);
+    expect(resolveTotalTokens({ totalTokens: 42, totalTokensFresh: false })).toBeUndefined();
+    expect(
+      resolveTotalTokens({ totalTokens: 42, totalTokensFresh: false, totalTokensEstimate: 100 }),
+    ).toBe(100);
+    expect(resolveTotalTokens({ totalTokensEstimate: 100 })).toBe(100);
     expect(resolveTotalTokens({ inputTokens: 10, outputTokens: 5 })).toBe(15);
     expect(resolveTotalTokens({ inputTokens: Number.NaN, outputTokens: 5 })).toBeUndefined();
 

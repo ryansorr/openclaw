@@ -671,7 +671,8 @@ export async function runCronIsolatedAgentTurn(params: {
           }),
         }),
       );
-      const hasCurrentUsage = hasExplicitUsage(usage);
+      const hasCurrentUsage =
+        hasExplicitUsage(usage) || (typeof promptTokens === "number" && promptTokens >= 0);
       const useFallback = !modelChanged && !hasCurrentUsage;
       cronSession.sessionEntry.inputTokens =
         input ?? (useFallback ? cronSession.sessionEntry.inputTokens : undefined);

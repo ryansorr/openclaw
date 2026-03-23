@@ -7,6 +7,7 @@ describe("resolveBundledPluginWebSearchProviders", () => {
 
     expect(providers.map((provider) => `${provider.pluginId}:${provider.id}`)).toEqual([
       "brave:brave",
+      "duckduckgo:duckduckgo",
       "google:gemini",
       "xai:grok",
       "moonshot:kimi",
@@ -17,6 +18,7 @@ describe("resolveBundledPluginWebSearchProviders", () => {
     ]);
     expect(providers.map((provider) => provider.credentialPath)).toEqual([
       "plugins.entries.brave.config.webSearch.apiKey",
+      "",
       "plugins.entries.google.config.webSearch.apiKey",
       "plugins.entries.xai.config.webSearch.apiKey",
       "plugins.entries.moonshot.config.webSearch.apiKey",
@@ -45,13 +47,14 @@ describe("resolveBundledPluginWebSearchProviders", () => {
 
     expect(providers.map((provider) => provider.pluginId)).toEqual([
       "brave",
+      "duckduckgo",
+      "exa",
+      "firecrawl",
       "google",
-      "xai",
       "moonshot",
       "perplexity",
-      "firecrawl",
-      "exa",
       "tavily",
+      "xai",
     ]);
   });
 
@@ -100,6 +103,7 @@ describe("resolveBundledPluginWebSearchProviders", () => {
 
     expect(providers.map((provider) => `${provider.pluginId}:${provider.id}`)).toEqual([
       "brave:brave",
+      "duckduckgo:duckduckgo",
       "google:gemini",
       "xai:grok",
       "moonshot:kimi",

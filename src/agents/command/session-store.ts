@@ -119,7 +119,8 @@ export async function updateSessionStoreAfterAgentRun(params: {
         }),
       }),
     );
-    const hasCurrentUsage = hasExplicitUsage(usage);
+    const hasCurrentUsage =
+      hasExplicitUsage(usage) || (typeof promptTokens === "number" && promptTokens >= 0);
     const useFallback = !modelChanged && !hasCurrentUsage;
     next.inputTokens = input ?? (useFallback ? entry.inputTokens : undefined);
     next.outputTokens = output ?? (useFallback ? entry.outputTokens : undefined);

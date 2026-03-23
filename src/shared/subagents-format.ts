@@ -67,14 +67,11 @@ export function resolveTotalTokens(entry?: TokenUsageLike) {
   ) {
     return entry.totalTokensEstimate;
   }
-  const input = typeof entry.inputTokens === "number" ? (entry.inputTokens as number) : 0;
-  const output = typeof entry.outputTokens === "number" ? (entry.outputTokens as number) : 0;
+  const input = typeof entry.inputTokens === "number" ? entry.inputTokens : 0;
+  const output = typeof entry.outputTokens === "number" ? entry.outputTokens : 0;
   const total = input + output;
   if (total > 0) {
     return total;
-  }
-  if (typeof total === "number" && !Number.isFinite(total)) {
-    return undefined;
   }
   return undefined;
 }

@@ -16,6 +16,7 @@ import {
   normalizeMainKey,
   parseAgentSessionKey,
 } from "../routing/session-key.js";
+import { resolveTotalTokens } from "../shared/subagents-format.js";
 import { getSlashCommands } from "./commands.js";
 import { ChatLog } from "./components/chat-log.js";
 import { CustomEditor } from "./components/custom-editor.js";
@@ -641,7 +642,7 @@ export async function runTui(opts: TuiOptions) {
         : sessionInfo.model
       : "unknown";
     const tokens = formatTokens(
-      sessionInfo.totalTokens ?? sessionInfo.totalTokensEstimate ?? null,
+      resolveTotalTokens(sessionInfo) ?? null,
       sessionInfo.contextTokens ?? null,
     );
     const think = sessionInfo.thinkingLevel ?? "off";

@@ -242,6 +242,8 @@ function buildErrorAgentMeta(params: {
   lastAssistant?: { usage?: unknown } | null;
   /** API-reported total from the most recent call, mirroring the success path correction. */
   lastTurnTotal?: number;
+  /** Explicit prompt/context snapshot size, used to report reset-to-zero context. */
+  promptTokens?: number;
 }): EmbeddedPiAgentMeta {
   const usage = toNormalizedUsage(params.usageAccumulator);
   // Apply the same lastTurnTotal correction the success path uses so
@@ -253,7 +255,7 @@ function buildErrorAgentMeta(params: {
     ? normalizeUsage(params.lastAssistant.usage as UsageLike)
     : undefined;
   const hasAuthoritativeUsage = hasExplicitUsage(lastCallUsage);
-  const promptTokens = derivePromptTokens(params.lastRunPromptUsage);
+  const promptTokens = params.promptTokens ?? derivePromptTokens(params.lastRunPromptUsage);
   return {
     sessionId: params.sessionId,
     provider: params.provider,
@@ -261,7 +263,7 @@ function buildErrorAgentMeta(params: {
     // Only include usage fields when we have actual data from prior API calls.
     ...(usage ? { usage } : {}),
     ...(hasAuthoritativeUsage ? { lastCallUsage } : {}),
-    ...(typeof promptTokens === "number" && (promptTokens > 0 || hasAuthoritativeUsage)
+    ...(typeof promptTokens === "number" && (promptTokens >= 0 || hasAuthoritativeUsage)
       ? { promptTokens }
       : {}),
   };

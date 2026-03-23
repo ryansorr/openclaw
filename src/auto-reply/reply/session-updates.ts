@@ -173,9 +173,21 @@ export async function incrementCompactionCount(params: {
   };
   // If tokensAfter is provided, update the cached token counts to reflect post-compaction state
   if (tokensAfter != null && tokensAfter >= 0) {
+    const prevEstimate = entry.totalTokensEstimate;
+    const prevTotal = entry.totalTokens;
+    const prevWasZero = prevEstimate === 0 || (prevEstimate === undefined && prevTotal === 0);
+
     updates.totalTokens = tokensAfter;
-    updates.totalTokensFresh = true;
+    updates.totalTokensFresh = tokensAfter > 0 || prevWasZero;
     updates.totalTokensEstimate = tokensAfter;
+
+    if (tokensAfter === 0 && !updates.totalTokensFresh) {
+      const fallback = prevEstimate ?? prevTotal;
+      if (fallback !== undefined && fallback > 0) {
+        updates.totalTokensEstimate = fallback;
+      }
+    }
+
     // Clear input/output breakdown since we only have the total estimate after compaction
     updates.inputTokens = undefined;
     updates.outputTokens = undefined;

@@ -119,8 +119,8 @@ export async function updateSessionStoreAfterAgentRun(params: {
         }),
       }),
     );
-    const hasCurrentUsage =
-      hasExplicitUsage(usage) || (typeof promptTokens === "number" && promptTokens >= 0);
+    const lastCallUsage = result.meta.agentMeta?.lastCallUsage;
+    const hasCurrentUsage = hasExplicitUsage(usage) || Boolean(lastCallUsage) || promptTokens === 0;
     const useFallback = !modelChanged && !hasCurrentUsage;
     next.inputTokens = input ?? (useFallback ? entry.inputTokens : undefined);
     next.outputTokens = output ?? (useFallback ? entry.outputTokens : undefined);
@@ -128,7 +128,6 @@ export async function updateSessionStoreAfterAgentRun(params: {
     const prevTotal = entry.totalTokens;
     const prevWasZero = prevEstimate === 0 || (prevEstimate === undefined && prevTotal === 0);
 
-    const lastCallUsage = result.meta.agentMeta?.lastCallUsage;
     const hasFreshContextSnapshot =
       Boolean(lastCallUsage) || (typeof promptTokens === "number" && promptTokens >= 0);
 

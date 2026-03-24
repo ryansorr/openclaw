@@ -38,9 +38,15 @@ describe("shared/subagents-format", () => {
     expect(resolveTotalTokens({ totalTokens: 42 })).toBe(42);
     expect(resolveTotalTokens({ totalTokens: 42, totalTokensFresh: false })).toBeUndefined();
     expect(
-      resolveTotalTokens({ totalTokens: 42, totalTokensFresh: false, totalTokensEstimate: 100 }),
+      resolveTotalTokens(
+        { totalTokens: 42, totalTokensFresh: false, totalTokensEstimate: 100 },
+        { allowStaleEstimate: true },
+      ),
     ).toBe(100);
-    expect(resolveTotalTokens({ totalTokensEstimate: 100 })).toBe(100);
+    expect(resolveTotalTokens({ totalTokensEstimate: 100 }, { allowStaleEstimate: true })).toBe(
+      100,
+    );
+    expect(resolveTotalTokens({ totalTokensEstimate: 100 })).toBeUndefined();
     expect(resolveTotalTokens({ inputTokens: 10, outputTokens: 5 })).toBe(15);
     expect(resolveTotalTokens({ inputTokens: Number.NaN, outputTokens: 5 })).toBeUndefined();
 

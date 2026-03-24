@@ -194,7 +194,8 @@ export function shouldRunMemoryFlush(params: {
       ? Math.floor(override)
       : undefined;
 
-  const totalTokens = overrideTokens ?? resolveTotalTokens(params.entry);
+  const totalTokens =
+    overrideTokens ?? resolveTotalTokens(params.entry, { allowStaleEstimate: true });
   if (!totalTokens || totalTokens <= 0) {
     return false;
   }

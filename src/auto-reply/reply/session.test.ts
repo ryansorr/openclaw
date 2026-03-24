@@ -6,6 +6,7 @@ import * as bootstrapCache from "../../agents/bootstrap-cache.js";
 import { buildModelAliasIndex } from "../../agents/model-selection.js";
 import type { OpenClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions.js";
+import * as sessionArchive from "../../gateway/session-archive.fs.js";
 import { formatZonedTimestamp } from "../../infra/format-time/format-datetime.ts";
 import {
   __testing as sessionBindingTesting,
@@ -1495,8 +1496,7 @@ describe("initSessionState preserves behavior overrides across /new and /reset",
       sessionId: existingSessionId,
       overrides: { verboseLevel: "on" },
     });
-    const sessionUtils = await import("../../gateway/session-utils.fs.js");
-    const archiveSpy = vi.spyOn(sessionUtils, "archiveSessionTranscripts");
+    const archiveSpy = vi.spyOn(sessionArchive, "archiveSessionTranscripts");
 
     const cfg = {
       session: { store: storePath, idleMinutes: 999 },
@@ -1549,8 +1549,7 @@ describe("initSessionState preserves behavior overrides across /new and /reset",
         },
       });
 
-      const sessionUtils = await import("../../gateway/session-utils.fs.js");
-      const archiveSpy = vi.spyOn(sessionUtils, "archiveSessionTranscripts");
+      const archiveSpy = vi.spyOn(sessionArchive, "archiveSessionTranscripts");
 
       const cfg = { session: { store: storePath } } as OpenClawConfig;
       const result = await initSessionState({
@@ -1785,8 +1784,8 @@ describe("persistSessionUsageUpdate", () => {
     const stored = JSON.parse(await fs.readFile(storePath, "utf-8"));
     expect(stored[sessionKey].totalTokens).toBe(39_000);
     expect(stored[sessionKey].totalTokensFresh).toBe(true);
-    expect(stored[sessionKey].inputTokens).toBe(1_234);
-    expect(stored[sessionKey].outputTokens).toBe(456);
+    expect(stored[sessionKey].inputTokens).toBeUndefined();
+    expect(stored[sessionKey].outputTokens).toBeUndefined();
   });
 
   it("keeps non-clamped lastCallUsage totalTokens when exceeding context window", async () => {

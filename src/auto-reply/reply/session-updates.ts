@@ -175,10 +175,9 @@ export async function incrementCompactionCount(params: {
   if (tokensAfter != null && tokensAfter >= 0) {
     const prevEstimate = entry.totalTokensEstimate;
     const prevTotal = entry.totalTokens;
-    const prevWasZero = prevEstimate === 0 || (prevEstimate === undefined && prevTotal === 0);
 
     updates.totalTokens = tokensAfter;
-    updates.totalTokensFresh = tokensAfter > 0 || prevWasZero;
+    updates.totalTokensFresh = tokensAfter > 0;
     updates.totalTokensEstimate = tokensAfter;
 
     if (tokensAfter === 0 && !updates.totalTokensFresh) {

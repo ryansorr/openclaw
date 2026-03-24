@@ -164,11 +164,11 @@ export function estimateUsageCost(params: {
   usage?: NormalizedUsage | UsageTotals | null;
   cost?: ModelCostConfig;
 }): number | undefined {
-  const usage = params.usage;
-  const cost = params.cost;
-  if (!usage || !cost) {
+  const { usage, cost } = params;
+  if (!usage) {
     return undefined;
   }
+
   const input = toNumber(usage.input);
   const output = toNumber(usage.output);
   const cacheRead = toNumber(usage.cacheRead);
@@ -176,6 +176,10 @@ export function estimateUsageCost(params: {
 
   if (input === 0 && output === 0 && cacheRead === 0 && cacheWrite === 0) {
     return 0;
+  }
+
+  if (!cost) {
+    return undefined;
   }
 
   const total =

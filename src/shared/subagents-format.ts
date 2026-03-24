@@ -48,7 +48,10 @@ export type TokenUsageLike = {
   outputTokens?: unknown;
 };
 
-export function resolveTotalTokens(entry?: TokenUsageLike) {
+export function resolveTotalTokens(
+  entry?: TokenUsageLike,
+  options?: { allowStaleEstimate?: boolean },
+) {
   if (!entry || typeof entry !== "object") {
     return undefined;
   }
@@ -61,6 +64,7 @@ export function resolveTotalTokens(entry?: TokenUsageLike) {
     return entry.totalTokens;
   }
   if (
+    options?.allowStaleEstimate &&
     typeof entry.totalTokensEstimate === "number" &&
     Number.isFinite(entry.totalTokensEstimate) &&
     entry.totalTokensEstimate > 0

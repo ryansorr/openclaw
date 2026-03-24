@@ -74,11 +74,11 @@ export function resolveTotalTokens(
   ) {
     return entry.totalTokensEstimate;
   }
-  const input =
+  const input: number =
     typeof entry.inputTokens === "number" && Number.isFinite(entry.inputTokens)
       ? entry.inputTokens
       : 0;
-  const output =
+  const output: number =
     typeof entry.outputTokens === "number" && Number.isFinite(entry.outputTokens)
       ? entry.outputTokens
       : 0;
@@ -110,8 +110,8 @@ export function resolveIoTokens(entry?: TokenUsageLike) {
     }
     return undefined;
   }
-  const input = entry.inputTokens;
-  const output = entry.outputTokens;
+  const input: number = entry.inputTokens;
+  const output: number = entry.outputTokens;
   const total = input + output;
   return { input, output, total };
 }

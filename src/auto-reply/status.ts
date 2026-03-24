@@ -480,11 +480,10 @@ export function buildStatusMessage(args: StatusArgs): string {
       const hasZeroEstimate = entry?.totalTokensEstimate === 0;
       if (
         logUsage.totalTokensFresh &&
+        candidate > 0 &&
         freshTotal === undefined &&
-        (entry?.totalTokensFresh === undefined || !entry?.totalTokensFresh) &&
-        ((entry?.totalTokensEstimate === undefined && candidate > 0) ||
-          candidate > (entry?.totalTokensEstimate ?? 0) ||
-          hasZeroEstimate)
+        (entry?.totalTokensEstimate === undefined || (candidate > 0 && hasZeroEstimate)) &&
+        entry?.totalTokensFresh === undefined
       ) {
         // Session transcript is authoritative only when the store has no fresh data
         // and no preserved estimate (or a zero estimate being overridden by fresh usage).
